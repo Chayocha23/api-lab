@@ -38,9 +38,24 @@ The expected failure remains in the test suite so the defect can be detected whe
 - **Actual result:** HTTP 500 Internal Server Error with an empty response body (Content-Length: 0). The behavior was reproduced using pytest and curl.
 - **Severity:** Medium — The API fails to handle an invalid request gracefully and returns an unexpected server error instead of a meaningful client error.
 
-## Part A
+## Part A — Input Space Partitioning for Ratings
 
-- Step A4, status codes when the other user reads, changes and deletes:
+### Step A1: Input Domain Model
+
+**Operation:** POST /api/ratings
+
+The request contains `pizza_id` and `stars` in the JSON body and an authentication token in the header.
+
+| Characteristic | Blocks | Values in the tests |
+|---|---|---|
+| C1 Value of stars | Below 1, 1 to 5 (base), above 5 | 0, 3, 6 |
+| C2 Type of stars | Whole number (base), decimal, text, missing | 3, 3.5, "3", no field |
+| C3 Pizza | Exists (base), does not exist | A new pizza, 999999999 |
+| C4 Token | The user's own (base), none, wrong length | From auth, no header, token short |
+
+**Base choice:** 3 stars as a whole number, an existing pizza, and the logged-in user's token.
+
+The model divides the input domain into blocks. Base choice coverage tests the base combination first, then changes one characteristic at a time while keeping the others at their base values.
 
 ## Part B
 
