@@ -112,6 +112,28 @@ All four boundary-value tests passed. Valid updates
 saved the new stars, while invalid updates preserved
 the original rating.
 
+### Step A4 — Who May Change a Rating
+
+**Testing Objective:** Verify that another authenticated user cannot read, update, or delete a rating owned by a different user.
+
+**Test Setup:**
+- User A creates a rating with 3 stars.
+- User B logs in using a separate account.
+- User B attempts to read, update, and delete User A's rating.
+- User A reads the rating afterward to verify that the original data remains unchanged.
+
+| Operation | Expected Status | Actual Status | Result |
+|---|---|---|---|
+| GET (Read) | 400–499 | 404 | PASSED |
+| PUT (Update) | 400–499 | 400 | PASSED |
+| DELETE | 400–499 | 400 | PASSED |
+
+**Command:** `pytest -v -s test_rating_owner.py`
+
+**Result:** 3 passed in 9.52s.
+
+**Conclusion:** All three authorization tests passed. Unauthorized access attempts were rejected, and the original rating remained unchanged.
+
 ## Part B
 
 1.
