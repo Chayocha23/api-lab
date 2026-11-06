@@ -89,6 +89,29 @@ Six additional test cases were designed using Base Choice Coverage. Each test ch
 
 All six Step A2 test cases passed. The previously identified defect from Step 0.16 remains marked as an expected failure (XFAIL).
 
+### Step A3 — Boundary Values for an Update
+
+**Operation:** PUT /api/ratings/{id}
+
+**Testing Technique:** Boundary Value Analysis (BVA)
+
+The valid range of rating stars is 1 to 5. Four boundary values were selected to test values immediately outside and at the valid limits.
+
+| Stars | Boundary Type | Expected Status | Expected Stored Value | Result |
+|---|---|---|---|---|
+| 0 | Below minimum | 400 | Original stars | Pending |
+| 1 | Minimum valid | 200 | 1 | Pending |
+| 5 | Maximum valid | 200 | 5 | Pending |
+| 6 | Above maximum | 400 | Original stars | Pending |
+
+**Command:** `pytest -v`
+
+**Result:** 29 passed, 1 xfailed in 40.20s.
+
+All four boundary-value tests passed. Valid updates
+saved the new stars, while invalid updates preserved
+the original rating.
+
 ## Part B
 
 1.
