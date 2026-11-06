@@ -99,10 +99,10 @@ The valid range of rating stars is 1 to 5. Four boundary values were selected to
 
 | Stars | Boundary Type | Expected Status | Expected Stored Value | Result |
 |---|---|---|---|---|
-| 0 | Below minimum | 400 | Original stars | Pending |
-| 1 | Minimum valid | 200 | 1 | Pending |
-| 5 | Maximum valid | 200 | 5 | Pending |
-| 6 | Above maximum | 400 | Original stars | Pending |
+| 0 | Below minimum | 400 | Original stars | PASSED |
+| 1 | Minimum valid | 200 | 1 | PASSED |
+| 5 | Maximum valid | 200 | 5 | PASSED |
+| 6 | Above maximum | 400 | Original stars | PASSED |
 
 **Command:** `pytest -v`
 
