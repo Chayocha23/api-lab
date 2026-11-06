@@ -221,7 +221,9 @@ I don't think this is necessarily a bug because the API still blocked all three 
 
 ### 7. Made-Up Token
 
-**Question:** Create madeup.txt with the line Authorization: token 0000000000000000, a made-up token of 16 characters, and run the command below. What comes back? Is this a defect, and what could a stranger do with it on a real system? Only read with this token, and never create or change anything with it.
+**Question:** Create madeup.txt with a made-up token of 16 characters and use it to read ratings. What comes back? Is this a defect, and what could a stranger do with it on a real system?
+
+**Command:**
 
 ```bash
 curl -H "@madeup.txt" https://quickpizza.grafana.com/api/ratings
@@ -229,9 +231,11 @@ curl -H "@madeup.txt" https://quickpizza.grafana.com/api/ratings
 
 **Answer:**
 
-I tested the API using a made-up token (`token short`). The server returned **401 Unauthorized** with the message `{"error": "authentication failed"}`.
+I tested the API using a made-up token (`0000000000000000`). The server returned **200 OK** and showed a list of ratings instead of rejecting the token.
 
-This shows that the API rejected the invalid token and did not allow the request to continue.
+I think this is a security defect because the API allowed an invalid token to read data. On a real system, a stranger might be able to see information that they should not have access to.
+
+I only used the token to read the ratings and did not create, update, or delete anything.
 
 ### 8. API Testing vs Web Page Testing
 
