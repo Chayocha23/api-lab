@@ -5,7 +5,6 @@
 - Step 0.1, the number of pizza names: 18
 - Step 0.3, status code of the request without a token: 401
 - Step 0.4, the name of your pizza: The Happy Hawaii
-- Step 0.16, blocks of "how many of the three tools are excluded":
 
 ### Step 0.16 — Bug Hunt Checkpoint
 
@@ -56,6 +55,39 @@ The request contains `pizza_id` and `stars` in the JSON body and an authenticati
 **Base choice:** 3 stars as a whole number, an existing pizza, and the logged-in user's token.
 
 The model divides the input domain into blocks. Base choice coverage tests the base combination first, then changes one characteristic at a time while keeping the others at their base values.
+
+### Step A1 — Test Execution Result
+
+**Command:** `pytest -v`
+
+**Result:** 19 passed, 1 xfailed in 25.38s.
+
+- Base choice (3 stars, valid pizza, valid token): PASSED
+- Stars below minimum (0): PASSED
+- Stars above maximum (6): PASSED
+
+All three Step A1 test cases passed. The previously identified defect from Step 0.16 remains marked as an expected failure (XFAIL).
+
+### Step A2 — Base Choice Coverage
+
+**Operation:** POST /api/ratings
+
+Six additional test cases were designed using Base Choice Coverage. Each test changes one characteristic from the base choice while keeping the other characteristics at their base values.
+
+| Test Case | Characteristic | Test Value | Expected Status | Result |
+|---|---|---|---|---|
+| Decimal stars | C2 | 3.5 | 400 | PASSED |
+| Text stars | C2 | "3" | 400 | PASSED |
+| Missing stars | C2 | No stars field | 400 | PASSED |
+| Invalid pizza | C3 | 999999999 | 400 | PASSED |
+| No token | C4 | No Authorization header | 401 | PASSED |
+| Short token | C4 | token short | 401 | PASSED |
+
+**Command:** `pytest -v`
+
+**Result:** 25 passed, 1 xfailed in 28.93s.
+
+All six Step A2 test cases passed. The previously identified defect from Step 0.16 remains marked as an expected failure (XFAIL).
 
 ## Part B
 
