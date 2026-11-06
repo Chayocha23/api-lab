@@ -164,7 +164,6 @@ For Project 2, I will create separate users and test data for each test so they 
 
 Using one session helps us reuse the same connection instead of starting a new connection for every request. It also keeps the session settings the same, which makes the tests easier to manage.
 
-*Step 0.12 results: To be added if completed.*
 
 ### 4. Bug Found in Step 0.16
 
