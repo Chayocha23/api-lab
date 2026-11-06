@@ -134,13 +134,111 @@ the original rating.
 
 **Conclusion:** All three authorization tests passed. Unauthorized access attempts were rejected, and the original rating remained unchanged.
 
-## Part B
+## Part B — Reflection
 
-1.
-2.
-3.
-4.
-5.
-6.
-7.
-8.
+### 1. API Testing vs Unit Testing
+
+**Question:** Your tests talk to a real server over the internet. Name two kinds of failure that they can find and a unit test with stubs cannot. Then give one reason to write unit tests with stubs as well.
+
+**Answer:**
+
+API tests can find problems with the connection between the client and the real server. They can also find problems when the server does not save or update data correctly.
+
+Unit tests with stubs are still useful because they are faster and help us find problems in specific parts of the code.
+
+### 2. Why Each Test Creates a New User
+
+**Question:** Why does every test create its own user with a new name, rather than use the public token? How will you apply the same idea to the shared shop or hotel in Project 2?
+
+**Answer:**
+
+Each test creates a new user to avoid using the same data as other tests. If we use a public token, other people might change the data and affect our test results.
+
+For Project 2, I will create separate users and test data for each test so they do not affect each other.
+
+### 3. Why We Use One Session
+
+**Question:** Explain in your own words why the tests send every request through one session. If you did Step 0.12, describe what happened in your three runs.
+
+**Answer:**
+
+Using one session helps us reuse the same connection instead of starting a new connection for every request. It also keeps the session settings the same, which makes the tests easier to manage.
+
+*Step 0.12 results: To be added if completed.*
+
+### 4. Bug Found in Step 0.16
+
+**Question:** Which block of the excluded tools revealed the defect in Step 0.16? Why is a 500 with an empty body worse for an app that calls the API than a 400 with a message? Why does the test stay in the suite as xfail instead of being deleted?
+
+**Answer:**
+
+Block B4 found the bug when all three tools were excluded.
+
+The API returned 500 with an empty response instead of 400 with an error message. This is a problem because the app cannot tell the user what went wrong.
+
+We keep the test as xfail because the bug is still there. If the bug gets fixed later, the test will help us notice the change.
+
+### 5. Base Choice Coverage
+
+**Question:** How many tests does base choice coverage need for the model in Step A1, and how many would all combinations coverage need? Show how you counted.
+
+**Answer:**
+
+There are four characteristics in Step A1:
+
+- C1 has 3 blocks.
+- C2 has 4 blocks.
+- C3 has 2 blocks.
+- C4 has 3 blocks.
+
+For base choice coverage:
+
+1 + (3 - 1) + (4 - 1) + (2 - 1) + (3 - 1) = **9 tests**
+
+For all combinations coverage:
+
+3 × 4 × 2 × 3 = **72 tests**
+
+Base choice coverage needs fewer tests because we start with one normal case and change only one characteristic at a time.
+
+### 6. Rating Ownership
+
+**Question:** In Step A4, which status codes did you get when the other user read, changed and deleted the rating? Which codes would you expect? Is the difference a defect? Explain.
+
+**Answer:**
+
+These are the results from my tests:
+
+| Action | Actual Status |
+|---|---|
+| Read rating | 404 |
+| Update rating | 400 |
+| Delete rating | 400 |
+
+I expected 403 Forbidden because the other user should not have permission to access or change the rating.
+
+I don't think this is necessarily a bug because the API still blocked all three actions, and the original rating was not changed. The exact expected status codes would depend on the API rules.
+
+### 7. Made-Up Token
+
+**Question:** Create madeup.txt with the line Authorization: token 0000000000000000, a made-up token of 16 characters, and run the command below. What comes back? Is this a defect, and what could a stranger do with it on a real system? Only read with this token, and never create or change anything with it.
+
+```bash
+curl -H "@madeup.txt" https://quickpizza.grafana.com/api/ratings
+```
+
+**Answer:**
+
+I tested the API using a made-up token (`token short`). The server returned **401 Unauthorized** with the message `{"error": "authentication failed"}`.
+
+This shows that the API rejected the invalid token and did not allow the request to continue.
+
+### 8. API Testing vs Web Page Testing
+
+**Question:** Name one thing that an API test checks better than a test through the web pages, and one thing that only a test through the web pages can check.
+
+**Answer:**
+
+API tests are better for checking status codes and JSON responses directly.
+
+Web page tests can check how the website looks and whether buttons and other parts of the page work correctly.
